@@ -19,10 +19,6 @@ app.use(bodyParser.json());
 
 app.use(requestLogger);
 
-app.use(routes);
-
-app.use(errorLogger);
-
 app.use((req, res, next) => {
   const requestHeaders = req.headers['access-control-request-headers'];
   const { method } = req;
@@ -33,6 +29,10 @@ app.use((req, res, next) => {
   next();
   return null;
 });
+
+app.use(routes);
+
+app.use(errorLogger);
 
 app.use(errors());
 
