@@ -1,0 +1,7 @@
+.elements__like_block {
+  display: flex;
+  width: 22px;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  align-items: center;
+}

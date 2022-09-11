@@ -1,0 +1,18 @@
+.profile__avatar {
+  height: 120px;
+  width: 120px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  background-image: url(../../../images/pencil.svg);
+  background-position: center;
+  background-size: 25px;
+  background-repeat: no-repeat;
+  transition: opacity 0.5s ease-in-out;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 907px) {
+  .profile__avatar {
+    margin-bottom: 26px;
+  }
+}

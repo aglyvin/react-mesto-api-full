@@ -1,0 +1,6 @@
+.popup-preview__container {
+  padding: 0;
+  position: relative;
+  max-width: 75vw;
+  max-height: 75vh;
+}

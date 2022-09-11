@@ -1,0 +1,16 @@
+.profile__add-button {
+  grid-column-start: 4;
+  grid-column-end: 5;
+  width: 150px;
+  height: 50px;
+  border: 2px solid white;
+  background-image: url(../../../images/plus.svg);
+  background-size: 22px;
+  justify-self: right;
+}
+
+@media screen and (max-width: 907px) {
+  .profile__add-button {
+    width: 100%;
+  }
+}

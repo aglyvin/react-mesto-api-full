@@ -1,0 +1,16 @@
+.popup__container-confirm {
+  padding: 0;
+  position: relative;
+  background-color: white;
+  border-radius: 10px;
+  max-width: 430px;
+  height: 200px;
+  width: 100%;
+}
+
+@media screen and (max-width: 505px) {
+  .popup__container-confirm {
+    width: 88%;
+    max-height: 200px;
+  }
+}
