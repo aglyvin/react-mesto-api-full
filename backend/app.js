@@ -20,6 +20,7 @@ app.use(bodyParser.json());
 app.use(requestLogger);
 
 app.use((req, res, next) => {
+  console.log('Заврос');
   console.log(res.header);
   res.header('Access-Control-Allow-Origin', '*');
   next();
