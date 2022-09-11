@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
-const cors = require('cors');
 const routes = require('./routes');
 const errorHandler = require('./errors/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -24,8 +23,16 @@ app.use(routes);
 
 app.use(errorLogger);
 
-app.use(cors());
-app.options('*', cors());
+app.use((req, res, next) => {
+  const requestHeaders = req.headers['access-control-request-headers'];
+  const { method } = req;
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+    return res.end();
+  }
+  next();
+  return null;
+});
 
 app.use(errors());
 
