@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import "../context/CurrentUserContext";
 import Header from "./Header.js";
 import Main from "./Main.js";
@@ -9,43 +9,69 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPhotoPopup from "./AddPhotoPopup";
 import ImagePopup from "./ImagePopup.js";
-
 import { CurrentUserContext } from "../context/CurrentUserContext";
+import ProtectedRoute from "./ProtectedRoute";
 import api from "../utils/Api";
+import Login from "./Login";
+import Signup from "./Signup";
+import authApi from "../utils/AuthApi";
+import InfoToolTip from "./InfoToolTip";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+    useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState(null);
-  const [currentUser, setCurrentUser] = React.useState(null);
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
-    api
-      .getUserInfo()
-      .then((userData) => {
-        setCurrentUser(userData);
-      })
-      .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));
-  }, []);
+    useState(false); 
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
+  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [cards, setCards] = useState([]);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [email, setEmail] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
-    api
-      .getCards()
-      .then((cardItems) => {
-        setCards(cardItems);
-      })
-      .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));
-  }, []);
+    if (loggedIn) {
+          api
+            .getUserInfo()
+            .then((userData) => {
+              setCurrentUser(userData);
+            })
+            .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));
+    }
+  }, [loggedIn]);
+
+  useEffect(() => {
+    if (loggedIn) {
+          api
+            .getCards()
+            .then((cardItems) => {
+              setCards(cardItems);
+            })
+            .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));
+    }
+  }, [loggedIn]);
+
+    useEffect(() => {
+      const jwt = localStorage.getItem("jwt");
+      if (jwt) {
+        authApi
+          .checkToken(jwt)
+          .then((res) => {
+            setLoggedIn(true);
+            setEmail(res.data.email);
+            history.push("/");
+          })
+          .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));
+      }
+    }, [history]);
 
   const handleEditProfileClick = () => setIsEditProfilePopupOpen(true);
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true);
   const handleAddPlaceClick = () => setIsAddPlacePopupOpen(true);
   const handleCardClick = (card) => setSelectedCard(card);
-
   const handleCardDelete = (card) => {
     
     api
@@ -71,6 +97,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setIsInfoToolTipOpen(false);
     setSelectedCard(null);
   };
 
@@ -100,19 +127,69 @@ function App() {
       .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));
   };
 
+  const handleSignUpSubmit = (data) => {
+    authApi.signup(data)
+      .then((resp) => {
+        setSignUpSuccess(true);
+        setIsInfoToolTipOpen(true);
+        history.push("/login");
+      })
+      .catch((err) => {
+        console.log("Ошибка. Запрос не выполнен: ", err);
+        setSignUpSuccess(false);
+        setIsInfoToolTipOpen(true);
+      });
+  }
+
+  function handleLoginSubmit(data) {
+    authApi
+      .signin(data)
+      .then((res) => {
+        localStorage.setItem("jwt", res.token);
+        setLoggedIn(true);
+        setEmail(email);
+        history.push("/");
+      })
+      .catch((err) => {
+        console.log("Ошибка. Запрос не выполнен: ", err);
+        setIsInfoToolTipOpen(true);
+      });
+  }
+
+  function handleSignOut() {
+    localStorage.removeItem("jwt");
+    setLoggedIn(false);
+    history.push("/login");
+  }
+
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-        <Header />
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          cards={cards}
-          handleCardDelete={handleCardDelete}
-          handleCardLike={handleCardLike}
-        />
+    <div className="page">
+      <CurrentUserContext.Provider value={currentUser}>
+        <Header onSignOut = { handleSignOut } email={email}/>
+        <Switch>
+          <ProtectedRoute
+            exact path="/"
+            loggedIn={loggedIn}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            cards={cards}
+            handleCardDelete={handleCardDelete}
+            handleCardLike={handleCardLike}
+            component={Main}
+
+          />
+          <Route path="/login">
+            <Login onSignIn={ handleLoginSubmit }/> 
+          </Route>
+          <Route path="/signup">
+            <Signup onSignUp={ handleSignUpSubmit }/> 
+          </Route>
+          <Route>
+            {loggedIn ? <Redirect to="/" /> : <Redirect to="login"/>}
+          </Route>
+        </Switch>
         <Footer />
 
         <EditProfilePopup
@@ -141,8 +218,14 @@ function App() {
         />
 
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+
+        <InfoToolTip 
+          isOpen={ isInfoToolTipOpen }
+          onClose={ closeAllPopups }
+          success={ signUpSuccess }
+        />
+      </CurrentUserContext.Provider>
       </div>
-    </CurrentUserContext.Provider>
   );
 }
 

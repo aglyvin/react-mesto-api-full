@@ -5,7 +5,6 @@ const { errors } = require('celebrate');
 const routes = require('./routes');
 const errorHandler = require('./errors/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { request } = require('express');
 
 const { PORT = 3000 } = process.env;
 
@@ -19,6 +18,11 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(bodyParser.json());
 
 app.use(requestLogger);
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 app.use(routes);
 

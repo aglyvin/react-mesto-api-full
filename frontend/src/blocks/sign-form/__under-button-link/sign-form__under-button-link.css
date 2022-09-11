@@ -1,0 +1,12 @@
+.sign-form__under-button-link {
+    margin: 0 0 0 3px;
+    padding: 0;
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.sign-form__under-button-link:hover {
+    opacity: 0.6;
+}

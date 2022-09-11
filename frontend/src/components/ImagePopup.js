@@ -1,6 +1,6 @@
 function ImagePopup(props) {
   return (
-    <div className={`popup popup-preview ${props.card ? " popup_opened" : ""}`}>
+    <div className={`popup popup-preview ${props.card && " popup_opened"}`}>
       <div className="popup-preview__container">
         <button
           className="popup__close-button"

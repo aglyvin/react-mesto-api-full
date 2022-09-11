@@ -1,0 +1,13 @@
+.sign-form__input {
+    height: 27px;
+    margin-top: 30px;
+    background-color: transparent;
+    border  : none;
+    border-bottom: 2px solid #cccccc;
+    padding-bottom: 13px;
+    color: #cccccc;
+}
+
+.sign-form__input:focus {
+    outline: none;
+}

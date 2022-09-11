@@ -1,9 +1,9 @@
 .page {
   min-width: 320px;
+  min-height: 100vh;
   margin: 0 auto;
   color: white;
   background-color: black;
-
   font-family: "Inter", sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-text-size-adjust: 100%;

@@ -1,0 +1,8 @@
+.sign-form {
+    display: flex;
+    flex-direction: column;
+    width: 358px;
+    margin: 0 auto;
+    justify-content: center;
+    margin-top: 60px;
+}

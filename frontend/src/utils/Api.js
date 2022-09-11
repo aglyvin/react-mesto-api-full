@@ -85,7 +85,7 @@ class Api {
   }
 }
 
-const api = new Api("https://mesto.nomoreparties.co/v1/cohort-43", {
+const api = new Api("https:\\api.aglyvin.students.nomorepartiesxyz.ru", {
   authorization: "2f9c82fe-9e77-4bc3-9e57-b3177cfe4c33",
   "Content-Type": "application/json",
 });
