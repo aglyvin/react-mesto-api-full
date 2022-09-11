@@ -5,6 +5,7 @@ const { errors } = require('celebrate');
 const routes = require('./routes');
 const errorHandler = require('./errors/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const cors = require('cors');
 
 const { PORT = 3000 } = process.env;
 
@@ -20,8 +21,6 @@ app.use(bodyParser.json());
 app.use(requestLogger);
 
 app.use((req, res, next) => {
-  console.log('Заврос');
-  console.log(res.header);
   res.header('Access-Control-Allow-Origin', '*');
   next();
 });
@@ -29,6 +28,9 @@ app.use((req, res, next) => {
 app.use(routes);
 
 app.use(errorLogger);
+
+app.use(cors());
+app.options('*', cors());
 
 app.use(errors());
 
