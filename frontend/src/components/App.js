@@ -62,6 +62,7 @@ function App() {
           .then((res) => {
             setLoggedIn(true);
             setEmail(res.data.email);
+            api.setAuthorization(jwt);
             history.push("/");
           })
           .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));

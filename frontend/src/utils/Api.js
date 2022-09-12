@@ -11,6 +11,10 @@ class Api {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
+  setAuthorization( bearer ) {
+    this._headers.authorization = bearer;
+  }
+
   getUserInfo() {
     return fetch(this._url + "/users/me", {
       headers: this._headers,
