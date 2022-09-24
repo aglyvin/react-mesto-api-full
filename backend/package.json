@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "lint": "npx eslint .",
-    "deploy": "scp -r * aglyvin@aglyvin.nomoredomains.sbs:/home/aglyvin/mesto-backend"
+    "lint": "npx eslint ."
   },
   "repository": {
     "type": "git",

@@ -13,6 +13,7 @@ class Api {
 
   setAuthorization( bearer ) {
     this._headers.authorization = bearer;
+    console.log(this._headers);
   }
 
   getUserInfo() {

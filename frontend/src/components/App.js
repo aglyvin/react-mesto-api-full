@@ -54,20 +54,20 @@ function App() {
     }
   }, [loggedIn]);
 
-    useEffect(() => {
-      const jwt = localStorage.getItem("jwt");
-      if (jwt) {
-        authApi
-          .checkToken(jwt)
-          .then((res) => {
-            setLoggedIn(true);
-            setEmail(res.data.email);
-            api.setAuthorization(jwt);
-            history.push("/");
-          })
-          .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));
-      }
-    }, [history]);
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      authApi
+        .checkToken(jwt)
+        .then((res) => {
+          setLoggedIn(true);
+          setEmail(res.data.email);
+          api.setAuthorization(jwt);
+          history.push("/");
+        })
+        .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));
+    }
+  }, [history]);
 
   const handleEditProfileClick = () => setIsEditProfilePopupOpen(true);
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true);
