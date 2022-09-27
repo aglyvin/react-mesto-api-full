@@ -67,21 +67,30 @@ class Api {
   deleteCard(id) {
     return fetch(this._url + "/cards/" + id, {
       method: "DELETE",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
     }).then(this._checkResponse);
   }
 
   likeCard(id) {
     return fetch(this._url + `/cards/${id}/likes`, {
       method: "PUT",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
     }).then(this._checkResponse);
   }
 
   dislikeCard(id) {
     return fetch(this._url + `/cards/${id}/likes`, {
       method: "DELETE",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
     }).then(this._checkResponse);
   }
 
@@ -92,11 +101,11 @@ class Api {
     } else {
       resp = this.likeCard(id);
     }
+    console.log('card ' + resp)
     return resp;
   }
 
   getCards() {
-    console.log(this._headers);
     return fetch(this._url + `/cards`, {
       headers: {
         ...this._headers,

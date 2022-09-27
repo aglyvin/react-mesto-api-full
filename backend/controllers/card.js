@@ -62,7 +62,7 @@ module.exports.like = (req, res, next) => {
       if (!crd) {
         next(new NotFoundError('Карточка не найдена'));
       } else {
-        res.send({ data: 'like' });
+        res.send(crd);
       }
     })
     .catch((e) => {

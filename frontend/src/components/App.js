@@ -33,6 +33,24 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      authApi
+        .checkToken(jwt)
+        .then((res) => {
+          if (res) {
+            setLoggedIn(true);
+            setEmail(res.email);
+            history.push("/");
+
+          }
+          
+        })
+        .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));
+    }
+  }, [history]);
+
+  useEffect(() => {
     if (loggedIn) {
           api
             .getUserInfo()
@@ -54,27 +72,12 @@ function App() {
     }
   }, [loggedIn]);
 
-  useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      authApi
-        .checkToken(jwt)
-        .then((res) => {
-          setLoggedIn(true);
-          setEmail(res.data.email);
-          // api.setAuthorization(jwt);
-          history.push("/");
-        })
-        .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));
-    }
-  }, [history]);
 
   const handleEditProfileClick = () => setIsEditProfilePopupOpen(true);
   const handleEditAvatarClick = () => setIsEditAvatarPopupOpen(true);
   const handleAddPlaceClick = () => setIsAddPlacePopupOpen(true);
   const handleCardClick = (card) => setSelectedCard(card);
   const handleCardDelete = (card) => {
-    
     api
       .deleteCard(card._id)
       .then(() => setCards((state) => state.filter((c) => c._id !== card._id)))
@@ -83,7 +86,6 @@ function App() {
 
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
-
     api
       .changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
