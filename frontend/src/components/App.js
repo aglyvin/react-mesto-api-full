@@ -42,9 +42,7 @@ function App() {
             setLoggedIn(true);
             setEmail(res.email);
             history.push("/");
-
           }
-          
         })
         .catch((err) => console.log("Ошибка. Запрос не выполнен: ", err));
     }
