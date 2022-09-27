@@ -35,6 +35,6 @@ class AuthApi {
     }
 }
 
-const authApi = new AuthApi("https:\\api.aglyvin.students.nomorepartiesxyz.ru", {"Content-Type": "application/json", 'Accept': 'application/json'});
+const authApi = new AuthApi("https://api.aglyvin.students.nomorepartiesxyz.ru", {"Content-Type": "application/json", 'Accept': 'application/json'});
 
 export default authApi;
