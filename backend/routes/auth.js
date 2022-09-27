@@ -6,12 +6,6 @@ const {
 } = require('../controllers/users');
 const { validateUrl } = require('./validateUrl');
 
-router.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
-
 router.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
