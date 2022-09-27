@@ -13,19 +13,25 @@ class Api {
 
   setAuthorization( bearer ) {
     this._headers.authorization = bearer;
-    console.log(this._headers);
+    console.log('Add bearer:' + this._headers);
   }
 
   getUserInfo() {
     return fetch(this._url + "/users/me", {
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
     }).then(this._checkResponse);
   }
 
   setUserInfo({ name, about }) {
     return fetch(this._url + "/users/me", {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
       body: JSON.stringify({
         name: name,
         about: about,
@@ -37,7 +43,10 @@ class Api {
     console.log(avatarUrl)
     return fetch(this._url + `/users/me/avatar`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
       body: JSON.stringify({
         avatar: avatarUrl,
       }),
@@ -47,7 +56,10 @@ class Api {
   addCard(cardInfo) {
     return fetch(this._url + "/cards", {
       method: "POST",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
       body: JSON.stringify(cardInfo),
     }).then(this._checkResponse);
   }
@@ -84,14 +96,17 @@ class Api {
   }
 
   getCards() {
+    console.log(this._headers);
     return fetch(this._url + `/cards`, {
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
     }).then(this._checkResponse);
   }
 }
 
-const api = new Api("https:\\api.aglyvin.students.nomorepartiesxyz.ru", {
-  authorization: "2f9c82fe-9e77-4bc3-9e57-b3177cfe4c33",
+const api = new Api("https://api.aglyvin.students.nomorepartiesxyz.ru", {
   "Content-Type": "application/json",
 });
 
