@@ -101,7 +101,7 @@ class Api {
     } else {
       resp = this.likeCard(id);
     }
-    console.log('card ' + resp)
+    console.log('card ' + resp.json())
     return resp;
   }
 
