@@ -13,7 +13,6 @@ class Api {
 
   setAuthorization( bearer ) {
     this._headers.authorization = bearer;
-    console.log('Add bearer:' + this._headers);
   }
 
   getUserInfo() {
@@ -40,7 +39,6 @@ class Api {
   }
 
   setAvatar(avatarUrl) {
-    console.log(avatarUrl)
     return fetch(this._url + `/users/me/avatar`, {
       method: "PATCH",
       headers: {
