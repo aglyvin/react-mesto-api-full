@@ -6,6 +6,8 @@ const { NotFoundError } = require('../errors/NotFoundError');
 const { UnauthorizeError } = require('../errors/UnauthorizeError');
 const user = require('../models/user');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 module.exports.getUsers = (req, res, next) => {
   user.find({})
     .then((users) => res.send(users))
@@ -128,7 +130,9 @@ module.exports.login = (req, res, next) => {
     .then((usr) => {
       const token = jwt.sign(
         { _id: usr._id },
-        'some-secret-key',
+        NODE_ENV === 'production'
+          ? JWT_SECRET
+          : 'some-secret-key',
         { expiresIn: '7d' },
       );
       res.send({ token });
